@@ -1,5 +1,7 @@
 package application;
 	
+import java.awt.event.KeyEvent;
+
 import com.rjservers.gameoflife.ConwayCanvas;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -11,6 +13,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -28,25 +31,29 @@ public class Main extends Application {
 			inputDensity.setPrefSize(40, 10);
 			inputDensity.setFont(Font.font("Verdana",10));
 			inputDensity.setCenterShape(true);
-			inputDensity.setText("10");
+			inputDensity.setText("3");
+			
 			
 			TextArea matrixSizeInput = new TextArea();
 			matrixSizeInput.setPrefSize(40, 10);
 			matrixSizeInput.setFont(Font.font("Verdana",10));
 			matrixSizeInput.setCenterShape(true);
-			matrixSizeInput.setText("200");
+			matrixSizeInput.setText("500");
+			
 			
 			//Input descriptions
 			Label lblDensity = new Label("Population Density 1/");
 			lblDensity.setCenterShape(true);
 			lblDensity.setFont(Font.font("Verdana",15));
 			
+			
 			Label lblSize = new Label("Matrix size: ");
 			lblSize.setCenterShape(true);
 			lblSize.setFont(Font.font("Verdana",15));
 		
+		
 			
-			final  ConwayCanvas canvas = new ConwayCanvas(300,300);
+			final  ConwayCanvas canvas = new ConwayCanvas(300,300, true);
 			canvas.toBack();
 		
 			final Thread thrd = new Thread(canvas);
@@ -54,7 +61,7 @@ public class Main extends Application {
 			thrd.setDaemon(true);
 			
 			//color of cells in canvas
-			ColorPicker cellColorPicker = new ColorPicker(Color.GREEN);
+			ColorPicker cellColorPicker = new ColorPicker(Color.WHITE);
 			cellColorPicker.setPrefSize(40, 40);
 			cellColorPicker.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>()
 					{
@@ -136,6 +143,7 @@ public class Main extends Application {
 			Button btnStart = new Button("Start");
 			btnStart.setPrefHeight(40);
 			btnStart.setFont(Font.font("Verdana",15));
+		
 			
 			//start animation
 			btnStart.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>()
@@ -197,7 +205,12 @@ public class Main extends Application {
 			HBox hBox = new HBox();
 			hBox.getChildren().addAll(lblDensity,inputDensity, lblSize, matrixSizeInput, btnStart,btnReset,cellColorPicker,bgColorPicker);
 			hBox.setSpacing(8);
-			hBox.setPrefHeight(20);
+			hBox.setPrefHeight(10);
+			hBox.setVisible(false);
+			hBox.setManaged(false);
+			
+
+		
 		
 			//Add nodes to pane and create scene
 			BorderPane pane = new BorderPane();
@@ -211,19 +224,55 @@ public class Main extends Application {
 			canvas.draw();
 			
 			Scene scene = new Scene(pane, 700, 700);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			
 			
 			primaryStage.setScene(scene);
 			primaryStage.centerOnScreen();
 			primaryStage.getIcons().add(new Image("http://rjservers.com/img/life.png"));
+			scene.setOnKeyPressed(e ->
+			{
+		
 			
+					// TODO Auto-generated method stub
+					KeyCode key = e.getCode();
+					//handle full screen
+					if(key == KeyCode.F11)
+					{
+						if(primaryStage.isFullScreen())
+							primaryStage.setFullScreen(false);
+						else
+							primaryStage.setFullScreen(true);
+					}
+					
+					//handle input visibility
+					else if(key == KeyCode.ENTER)
+					{
+						if(hBox.isManaged())
+						{
+							hBox.setManaged(false);
+							hBox.setVisible(false);
+						}
+							
+						else
+						{
+							hBox.setManaged(true);
+							hBox.setVisible(true);
+						}
+					}
+				});
+			
+			primaryStage.setFullScreen(true);
 			primaryStage.show();
+			//primaryStage.setFocused(true);
+			thrd.start();
 		} 
 		
 		catch(Exception e) 
 		{
 			e.printStackTrace();
 		}
+		
+		
 	}
 	
 	public static void main(String[] args) 

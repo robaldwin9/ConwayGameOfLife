@@ -13,22 +13,28 @@ public class ConwayCanvas extends Canvas implements Runnable
 	private double height; 			//Starting height of canvas
 	private double width; 			//Starting width of canvas
 	private CellMatrix grid; 		//A matrix of binary cell values
-	private int density; 			//Determines the density of starting matrix
+	private int density; 		
+	
+	//Determines the density of starting matrix
 	private int size;				//The size of the matrix
 	private double drawDelay; 		//Time inbetween draw commands
 	private Color cellColor;		//Color of cells drawing on canvas
 	private Color backgroundColor;	//Color of non Living cells on canvas
+	private long drawCount;
+	boolean auto;
 	
 	/*
 	 * 
 	 */
-	public ConwayCanvas( double height, double width)
+	public ConwayCanvas( double height, double width, boolean auto)
 	{
+		drawCount = 0;
 		size = 200;
 		drawDelay = 0.1; //translates to 100 miliseconds
 		density = 10;
 		cellColor = Color.WHITE;
 		backgroundColor = Color.BLACK;
+		this.auto = auto;
 		
 		this.grid = new CellMatrix(size);
 		grid.randomize(density);
@@ -47,6 +53,7 @@ public class ConwayCanvas extends Canvas implements Runnable
 	}
 	public void draw()
 	{
+		
 		//Get Current height and width of canvas for determining size of cells
 		height = getHeight();
 		width = getWidth();
@@ -67,6 +74,13 @@ public class ConwayCanvas extends Canvas implements Runnable
 			}
 		}
 		context.setFill(Color.WHITE);
+		drawCount++;
+		
+		if(drawCount == 1000 && auto == true)
+		{
+			reset();
+			
+		}
 		
 	}
 	
@@ -82,6 +96,7 @@ public class ConwayCanvas extends Canvas implements Runnable
 		//stop();
 		grid = new CellMatrix(size);
 		grid.randomize(density);
+		drawCount = 0;
 		
 	}
 	//Updates the cell matrix that is used for drawing to the canvas
@@ -151,5 +166,10 @@ public class ConwayCanvas extends Canvas implements Runnable
 	public void setBackgroundColor(Color color)
 	{
 		backgroundColor = color;
+	}
+	
+	public Color getBgColor()
+	{
+		return backgroundColor;
 	}
 }
