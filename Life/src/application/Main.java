@@ -1,6 +1,5 @@
 package application;
 	
-import java.awt.event.KeyEvent;
 
 import com.rjservers.gameoflife.ConwayCanvas;
 import javafx.application.Application;
@@ -139,71 +138,11 @@ public class Main extends Application {
 				}
 			});
 			
-			//Begins drawing on the canvas
-			Button btnStart = new Button("Start");
-			btnStart.setPrefHeight(40);
-			btnStart.setFont(Font.font("Verdana",15));
 		
-			
-			//start animation
-			btnStart.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>()
-			{
-				@Override	
-				public void handle(ActionEvent e)
-				{
-					//Thread is only started once
-					if(!thrd.isAlive())
-					{
-						try 
-						{
-							int density = Integer.parseInt(inputDensity.getText());
-								
-							if(density > 100 )
-							{
-								inputDensity.setText("100");
-								density = 100;
-							}
-							
-							else if(density < 1)
-							{
-								inputDensity.setText("1");
-								density = 1;
-							}
-							
-						canvas.setDensity(density);
-						int size = Integer.parseInt(matrixSizeInput.getText());
-							
-							if(size > 1000)
-							{
-								matrixSizeInput.setText("200");
-								size = 1000;
-							}
-							
-							else if(size < 10)
-							{
-								size = 5;
-								matrixSizeInput.setText("5");
-							}
-						canvas.setSize(size);
-						canvas.reset();
-					}
-							
-					catch(NumberFormatException ex)
-					{
-							
-					}
-						
-					thrd.start();
-					
-					}
-							
-				}
-						
-			});
 			
 			//Holds Nodes for user input
 			HBox hBox = new HBox();
-			hBox.getChildren().addAll(lblDensity,inputDensity, lblSize, matrixSizeInput, btnStart,btnReset,cellColorPicker,bgColorPicker);
+			hBox.getChildren().addAll(lblDensity,inputDensity, lblSize, matrixSizeInput, btnReset,cellColorPicker,bgColorPicker);
 			hBox.setSpacing(8);
 			hBox.setPrefHeight(10);
 			hBox.setVisible(false);

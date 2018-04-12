@@ -14,10 +14,10 @@ public class ConwayCanvas extends Canvas implements Runnable
 	private double width; 			//Starting width of canvas
 	private CellMatrix grid; 		//A matrix of binary cell values
 	private int density; 		
-	
+
 	//Determines the density of starting matrix
 	private int size;				//The size of the matrix
-	private double drawDelay; 		//Time inbetween draw commands
+	private double drawDelay = 0; 		//Time inbetween draw commands
 	private Color cellColor;		//Color of cells drawing on canvas
 	private Color backgroundColor;	//Color of non Living cells on canvas
 	private long drawCount;
@@ -30,7 +30,7 @@ public class ConwayCanvas extends Canvas implements Runnable
 	{
 		drawCount = 0;
 		size = 200;
-		drawDelay = 0.1; //translates to 100 miliseconds
+		drawDelay = 0.075; //translates to 100 miliseconds
 		density = 10;
 		cellColor = Color.WHITE;
 		backgroundColor = Color.BLACK;
@@ -109,13 +109,15 @@ public class ConwayCanvas extends Canvas implements Runnable
 	@Override
 	public void run()
 	{
+	
+		
 		//continually update and draw canvas
-		while( true)
+		while(true)
 		{
 			//Must be used to push canvas drawing to javaFX thread
 			//Canvas crashes after unspecified time if Platform.runLater is not used
-			Platform.runLater( new Runnable()
-			{
+		Platform.runLater( new Runnable()
+		{
 				@Override
 				public void run() 
 				{
